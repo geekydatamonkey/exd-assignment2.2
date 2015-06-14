@@ -10,10 +10,29 @@ class Wave {
     this.amplitude = 0;
     this.radius = 0;
     this.sketch = null;
+    this.start = (new Date()).getTime();
+    this.secondaryWaveTriggered = false;
+  }
+
+  setAmplitude(amp) {
+    this.amplitude = amp;
+  }
+
+  getAmplitude() {
+    return this.amplitude;
+  }
+
+  getRadius() {
+    return this.radius;
+  }
+  
+  getTimeSinceStart() {
+    return (new Date()).getTime() - this.start;
   }
 
   setSketch(sketch) {
     this.sketch = sketch;
+    return this;
   }
 
   update() {
@@ -26,8 +45,8 @@ class Wave {
       console.log('no sketch set');
       return;
     }
-    let s = this.sketch;
-    s.ellipse(this.x, this.y, this.radius, this.radius);
+    this.sketch.strokeWeight(this.amplitude);
+    this.sketch.ellipse(this.x, this.y, this.radius, this.radius);
   }
 
 }
