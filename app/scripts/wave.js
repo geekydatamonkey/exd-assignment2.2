@@ -45,7 +45,7 @@ class Wave {
       console.log('no sketch set');
       return;
     }
-    this.sketch.strokeWeight(this.amplitude);
+    this.sketch.strokeWeight(Math.round(this.amplitude));
     this.sketch.ellipse(this.x, this.y, this.radius, this.radius);
   }
 

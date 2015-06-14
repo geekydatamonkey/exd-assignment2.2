@@ -9,7 +9,8 @@ let Wave = require('./wave');
 
 const π = Math.PI;
 let config = {
-  canvasWrapper: '.canvas-wrapper'
+  canvasWrapper: '.canvas-wrapper',
+  initialAmp: 10
 };
 
 let waveList = [];
@@ -19,12 +20,13 @@ function checkForSecondaryWave(wave) {
   // and we're at the max point
   // and amplitude >= 1
 
+  if (wave.secondaryWaveTriggered) {
+    return false;
+  }
+
   let t = wave.getTimeSinceStart();
   let atMaxPoint = -1 * Math.cos(2*π*t/1200) > 0.999;
-
-  return (!wave.secondaryWaveTriggered) &&
-     atMaxPoint &&
-    (wave.getAmplitude() >= 1);
+  return atMaxPoint && (wave.getAmplitude() >= 1);
 }
 
 function createSecondaryWave(wave) {
@@ -36,7 +38,7 @@ function createSecondaryWave(wave) {
   
   // amplitude based on old wave
   let t = wave.getTimeSinceStart();
-  let newAmp = wave.amplitude * Math.exp(-3 /1000 * t);
+  let newAmp = wave.amplitude * Math.exp(-2 /1000 * t);
   secondary.setAmplitude(newAmp);
 
   // add to waveList
@@ -80,14 +82,12 @@ function mySketch(s){
       }
       waveList[i].update().render();
     }
-
-    console.log(waveList);
   };
 
   s.mousePressed = function() {
     let wave = new Wave(s.mouseX, s.mouseY);
     wave.setSketch(s);
-    wave.setAmplitude(10);
+    wave.setAmplitude(config.initialAmp);
     waveList.push(wave);
   };
 
@@ -99,6 +99,7 @@ function mySketch(s){
 
     // put in canvasWrapper
     s.resizeCanvas(w,h-3);
+    s.stroke(220);
 
   };
 }
